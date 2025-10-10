@@ -3,34 +3,36 @@ import java.util.Scanner;
 public class Program {
     public static void main(String[] args) {
 
-        // numero máximo que marcará el final del juego, el número ha de ser mayor que 10 y menor que 99.
 
-        System.out.println("Bienvenido, Dame un número entre 10 y 99 para iniciar el juego.");
-        System.out.println("Si quieres cualquier número, escribe -1 en la consola por favor.");
+        System.out.println("Bienvenido a PASA LA CALCULADORA");
+        System.out.println("Porfavor introduce un numero del 10 al 99");
+        System.out.println("Si quieres un numero aleatorio, introduce: -1");
 
-        // aqui ya se ha elegido el numero y empieza la partida a partir de aqui
+        int pedirNumeroObjetivo = pedirNumeroObjetivo();
 
-        System.out.println("Introduce un numero:");
+        System.out.println("El numero objetivo de la partida es:" );
 
-        int numeroDePartida = pedirNumeroUsuario();
+        System.out.println("Comienza el juego");
 
-        System.out.println("Has elegido el numero:" + numeroDePartida);
 
-        //Se crean los dos jugadores
 
-        String Jugador1;
-        String Jugador2;
 
-        System.out.println("Jugador 1 introduzca un número del 1 al 9");
+        int num1;
+        int numAnterior = -1;
+        int nuevoNumero = -1;
+        int numeroAnterior = -1;
+        int numeroTotal = -1;
+        int numeroTurnoActual = -1;
 
-        int primerNumeroJugador1 = pedirNumeroDel1Al9();
+        num1 = obtenerNumValidadoFilaColumna(numAnterior);
 
 
     }
 
+
     // funcion introducir numero tope para el juego
 
-    private static int pedirNumeroUsuario() {
+    private static int pedirNumeroObjetivo() {
 
         //Le pedimos un numero entero al usuario o un numero ramdom (-1)
 
@@ -54,7 +56,7 @@ public class Program {
                 break;
             } else {
                 System.err.println("numero invalido, porfavor introduce un numero valido (Debe ser entre 10 y 99, o -1)");
-                return pedirNumeroUsuario();
+                return pedirNumeroObjetivo();
             }
 
 
@@ -64,7 +66,7 @@ public class Program {
 
     }
 
-    //Preguntamos el número del 1 al 9 para empezar
+    //Preguntamos el número del 1 al 9 para empezar, solo devuelve numeros validos del 1 al 9
 
     private static int pedirNumeroDel1Al9() {
 
@@ -85,19 +87,96 @@ public class Program {
 
 //    Vamos a crear la condición de que el resto de números deben de estar en la msima fila y columna
 
-    private static int pedirNumerosJuego() {
+    private static boolean validarFilasColumnas(int nuevoNumero, int numeroAnterior) {
 
-        System.out.println("Introduzca un número que esté en la misma fila o columna que el anterior número");
-        Scanner sc = new Scanner(System.in);
-        int numeroFilaColumna = sc.nextInt();
+        //Si es el 1º turno, cualquier numero vale
+        if(numeroAnterior == -1){
+            return true;
+        }
+        if (nuevoNumero == 1) {
 
-        while (true) {
-            int numeroPedido = pedirNumeroDel1Al9();
-            if (numeroPedido == 1){
-
+            if (numeroAnterior == 2 || numeroAnterior == 3 || numeroAnterior == 4 || numeroAnterior == 7) {
+                return true;
             }
         }
 
+        if (nuevoNumero == 2) {
+
+            if (numeroAnterior == 1 || numeroAnterior == 3 || numeroAnterior == 5 || numeroAnterior == 8) {
+                return true;
+            }
+        }
+
+        if (nuevoNumero == 3) {
+
+            if (numeroAnterior == 1 || numeroAnterior == 2 || numeroAnterior == 6 || numeroAnterior == 9) {
+                return true;
+            }
+        }
+
+        if (nuevoNumero == 4) {
+
+            if (numeroAnterior == 1 || numeroAnterior == 7 || numeroAnterior == 5 || numeroAnterior == 6) {
+                return true;
+            }
+        }
+
+        if (nuevoNumero == 5) {
+
+            if (numeroAnterior == 4 || numeroAnterior == 6 || numeroAnterior == 2 || numeroAnterior == 8) {
+                return true;
+            }
+        }
+
+        if (nuevoNumero == 6) {
+
+            if (numeroAnterior == 4 || numeroAnterior == 5 || numeroAnterior == 3 || numeroAnterior == 9) {
+                return true;
+            }
+        }
+
+        if (nuevoNumero == 7) {
+
+            if (numeroAnterior == 1 || numeroAnterior == 4 || numeroAnterior == 8 || numeroAnterior == 9) {
+                return true;
+            }
+        }
+
+        if (nuevoNumero == 8) {
+
+            if (numeroAnterior == 2 || numeroAnterior == 5 || numeroAnterior == 7 || numeroAnterior == 9) {
+                return true;
+            }
+        }
+
+        if (nuevoNumero == 9) {
+
+            if (numeroAnterior == 3 || numeroAnterior == 6 || numeroAnterior == 7 || numeroAnterior == 8) {
+                return true;
+            }
+        }
+
+        return false;
 
     }
+
+    private static int obtenerNumValidadoFilaColumna(int numAnterior) {
+        int num1;
+        while(true){
+            num1 = pedirNumeroDel1Al9();
+            if(validarFilasColumnas(num1, numAnterior)){
+                break;
+            }
+        }
+        return num1;
+    }
+
+    private static int sumarLosResultados(int numeroTotal, int numeroTurnoActual) {
+        return numeroTotal + numeroTurnoActual;
+    }
+
+
+
+
+
 }
