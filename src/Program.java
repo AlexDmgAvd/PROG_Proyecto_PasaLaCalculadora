@@ -3,25 +3,41 @@ import java.util.Scanner;
 public class Program {
     public static void main(String[] args) {
 
-
+        int numeroTotal = 0;
         System.out.println("Bienvenido a PASA LA CALCULADORA");
         System.out.println("Porfavor introduce un numero del 10 al 99");
         System.out.println("Si quieres un numero aleatorio, introduce: -1");
 
-        int pedirNumeroObjetivo = pedirNumeroObjetivo();
+        int numeroObjetivo = pedirNumeroObjetivo();
 
-        System.out.println("El numero objetivo de la partida es:" );
+        System.out.println("El numero objetivo de la partida es:" + numeroObjetivo);
 
         System.out.println("Comienza el juego");
 
+        int numJugador = 1;
+
+        System.out.println("jugador" + numJugador + " inserta un numero del 1 al 9");
+
+        int nuevoNumero = pedirNumeroDel1Al9();
 
 
+
+        System.out.println("Turno de jugador" + esElTurnoDe(numJugador) + ":");
+
+        int numAnterior = nuevoNumero;
+        int numeroJugador = pedirNuevoNum(numAnterior,numJugador);
+        boolean esValido = validarFilasColumnas(nuevoNumero, numAnterior);
+        if(esValido) {
+            numeroTotal = sumarLosResultados(numeroTotal, nuevoNumero);
+        }
+
+        System.out.println("Jugador " + esElTurnoDe(numJugador) + "has introducido el número: " + numeroJugador);
+        System.out.println("Total Actual:" + numeroTotal);
+
+
+        int turno = 0;
 
         int num1;
-        int numAnterior = -1;
-        int nuevoNumero = -1;
-        int numeroAnterior = -1;
-        int numeroTotal = -1;
         int numeroTurnoActual = -1;
 
         num1 = obtenerNumValidadoFilaColumna(numAnterior);
@@ -32,7 +48,7 @@ public class Program {
 
     // funcion introducir numero tope para el juego
 
-    private static int pedirNumeroObjetivo() {
+    public static int pedirNumeroObjetivo() {
 
         //Le pedimos un numero entero al usuario o un numero ramdom (-1)
 
@@ -68,29 +84,49 @@ public class Program {
 
     //Preguntamos el número del 1 al 9 para empezar, solo devuelve numeros validos del 1 al 9
 
-    private static int pedirNumeroDel1Al9() {
+    public static int pedirNumeroDel1Al9() {
 
         Scanner sc = new Scanner(System.in);
         int numero1Al9 = sc.nextInt();
 
         while (true) {
+
             if (numero1Al9 >= 1 && numero1Al9 <= 9) {
-                System.out.println("Jugador1 " + "has introducido el número" + numero1Al9);
+                System.out.println("Jugador1 " + "has introducido el número: " + numero1Al9);
                 break;
             } else {
                 System.err.println("El número introducido no es válido");
-                return pedirNumeroDel1Al9();
+                numero1Al9 = sc.nextInt();
             }
         }
         return numero1Al9;
+
+    }
+
+    public static int pedirNuevoNum(int numeroAnterior, int numJugador) {
+
+        Scanner sc = new Scanner(System.in);
+        int nuevoNum = sc.nextInt();
+
+        while (true) {
+
+            if (validarFilasColumnas(nuevoNum, numeroAnterior)) {
+                break;
+            } else {
+                System.err.println("El número introducido no es válido");
+                nuevoNum = sc.nextInt();
+            }
+        }
+        return nuevoNum;
+
     }
 
 //    Vamos a crear la condición de que el resto de números deben de estar en la msima fila y columna
 
-    private static boolean validarFilasColumnas(int nuevoNumero, int numeroAnterior) {
+    public static boolean validarFilasColumnas(int nuevoNumero, int numeroAnterior) {
 
         //Si es el 1º turno, cualquier numero vale
-        if(numeroAnterior == -1){
+        if (numeroAnterior == -1) {
             return true;
         }
         if (nuevoNumero == 1) {
@@ -160,23 +196,36 @@ public class Program {
 
     }
 
-    private static int obtenerNumValidadoFilaColumna(int numAnterior) {
+    public static int obtenerNumValidadoFilaColumna(int numAnterior) {
         int num1;
-        while(true){
+        while (true) {
             num1 = pedirNumeroDel1Al9();
-            if(validarFilasColumnas(num1, numAnterior)){
+            if (validarFilasColumnas(num1, numAnterior)) {
                 break;
             }
         }
         return num1;
     }
 
-    private static int sumarLosResultados(int numeroTotal, int numeroTurnoActual) {
-        return numeroTotal + numeroTurnoActual;
+    public static int sumarLosResultados(int numeroTotal, int nuevoNum ) {
+
+        return numeroTotal + nuevoNum;
     }
 
+    public static boolean esFinDeJuego(int numeroTotal, int numeroObjetivo) {
+        return numeroTotal >= numeroObjetivo;
+    }
 
+    public static int esElTurnoDe(int jugador) {
 
+        if (jugador == 1) {
+            return 2;
+        }
+        if (jugador == 2) {
+            return 1;
+        }
+        return -1;
+    }
 
 
 }
