@@ -14,33 +14,39 @@ public class Program {
 
         System.out.println("Comienza el juego");
 
-        int numJugador = 1;
+        int numJugadorActual = 1;
 
-        System.out.println("jugador" + numJugador + " inserta un numero del 1 al 9");
+        System.out.println("jugador" + numJugadorActual + " inserta un numero del 1 al 9");
 
-        int nuevoNumero = pedirNumeroDel1Al9();
+        int numeroDel1Al9 = pedirNumeroDel1Al9();
+        numeroTotal = sumarLosResultados(numeroTotal, numeroDel1Al9);
+        int numAnterior = numeroDel1Al9;
 
 
+        int numeroJugador;
+        while (true){
 
-        System.out.println("Turno de jugador" + esElTurnoDe(numJugador) + ":");
+            if (numeroTotal >= numeroObjetivo){
+                break;
+            }else {
 
-        int numAnterior = nuevoNumero;
-        int numeroJugador = pedirNuevoNum(numAnterior,numJugador);
-        boolean esValido = validarFilasColumnas(nuevoNumero, numAnterior);
-        if(esValido) {
-            numeroTotal = sumarLosResultados(numeroTotal, nuevoNumero);
+                System.out.println("Turno de jugador " + esElTurnoDe(numJugadorActual) + ":");
+
+
+                numeroJugador = pedirNuevoNumValid(numAnterior);
+                numAnterior = numeroJugador;
+
+                numeroTotal = sumarLosResultados(numeroTotal, numeroJugador);
+                numeroJugador = numAnterior;
+
+                System.out.println("jugador" + esElTurnoDe(numJugadorActual) + " has introducido el número: " + numeroJugador);
+                System.out.println("Total Actual:" + numeroTotal + " Objetivo:" + numeroObjetivo);
+            }
+
+
         }
 
-        System.out.println("Jugador " + esElTurnoDe(numJugador) + "has introducido el número: " + numeroJugador);
-        System.out.println("Total Actual:" + numeroTotal);
-
-
-        int turno = 0;
-
-        int num1;
-        int numeroTurnoActual = -1;
-
-        num1 = obtenerNumValidadoFilaColumna(numAnterior);
+        System.out.println("El" + esElTurnoDe(numJugadorActual) + "ha ganado");
 
 
     }
@@ -103,7 +109,7 @@ public class Program {
 
     }
 
-    public static int pedirNuevoNum(int numeroAnterior, int numJugador) {
+    public static int pedirNuevoNumValid(int numeroAnterior) {
 
         Scanner sc = new Scanner(System.in);
         int nuevoNum = sc.nextInt();
@@ -123,69 +129,69 @@ public class Program {
 
 //    Vamos a crear la condición de que el resto de números deben de estar en la msima fila y columna
 
-    public static boolean validarFilasColumnas(int nuevoNumero, int numeroAnterior) {
+    public static boolean validarFilasColumnas(int numeroJugador, int numeroAnterior) {
 
         //Si es el 1º turno, cualquier numero vale
         if (numeroAnterior == -1) {
             return true;
         }
-        if (nuevoNumero == 1) {
+        if (numeroJugador == 1) {
 
             if (numeroAnterior == 2 || numeroAnterior == 3 || numeroAnterior == 4 || numeroAnterior == 7) {
                 return true;
             }
         }
 
-        if (nuevoNumero == 2) {
+        if (numeroJugador == 2) {
 
             if (numeroAnterior == 1 || numeroAnterior == 3 || numeroAnterior == 5 || numeroAnterior == 8) {
                 return true;
             }
         }
 
-        if (nuevoNumero == 3) {
+        if (numeroJugador == 3) {
 
             if (numeroAnterior == 1 || numeroAnterior == 2 || numeroAnterior == 6 || numeroAnterior == 9) {
                 return true;
             }
         }
 
-        if (nuevoNumero == 4) {
+        if (numeroJugador == 4) {
 
             if (numeroAnterior == 1 || numeroAnterior == 7 || numeroAnterior == 5 || numeroAnterior == 6) {
                 return true;
             }
         }
 
-        if (nuevoNumero == 5) {
+        if (numeroJugador == 5) {
 
             if (numeroAnterior == 4 || numeroAnterior == 6 || numeroAnterior == 2 || numeroAnterior == 8) {
                 return true;
             }
         }
 
-        if (nuevoNumero == 6) {
+        if (numeroJugador == 6) {
 
             if (numeroAnterior == 4 || numeroAnterior == 5 || numeroAnterior == 3 || numeroAnterior == 9) {
                 return true;
             }
         }
 
-        if (nuevoNumero == 7) {
+        if (numeroJugador == 7) {
 
             if (numeroAnterior == 1 || numeroAnterior == 4 || numeroAnterior == 8 || numeroAnterior == 9) {
                 return true;
             }
         }
 
-        if (nuevoNumero == 8) {
+        if (numeroJugador == 8) {
 
             if (numeroAnterior == 2 || numeroAnterior == 5 || numeroAnterior == 7 || numeroAnterior == 9) {
                 return true;
             }
         }
 
-        if (nuevoNumero == 9) {
+        if (numeroJugador == 9) {
 
             if (numeroAnterior == 3 || numeroAnterior == 6 || numeroAnterior == 7 || numeroAnterior == 8) {
                 return true;
@@ -194,17 +200,6 @@ public class Program {
 
         return false;
 
-    }
-
-    public static int obtenerNumValidadoFilaColumna(int numAnterior) {
-        int num1;
-        while (true) {
-            num1 = pedirNumeroDel1Al9();
-            if (validarFilasColumnas(num1, numAnterior)) {
-                break;
-            }
-        }
-        return num1;
     }
 
     public static int sumarLosResultados(int numeroTotal, int nuevoNum ) {
@@ -223,8 +218,9 @@ public class Program {
         }
         if (jugador == 2) {
             return 1;
+        }else {
+            return -1;
         }
-        return -1;
     }
 
 
