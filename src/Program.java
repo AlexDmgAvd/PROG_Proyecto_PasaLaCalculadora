@@ -5,130 +5,93 @@ public class Program {
 
         int numeroTotal = 0;
         System.out.println("Bienvenido a PASA LA CALCULADORA");
-        System.out.println("Porfavor introduce un numero del 10 al 99");
-        System.out.println("Si quieres un numero aleatorio, introduce: -1");
+        System.out.println("Por favor, introduce un número del 10 al 99");
+        System.out.println("Si quieres un número aleatorio, introduce: -1");
 
         int numeroObjetivo = pedirNumeroObjetivo();
-
-        System.out.println("El numero objetivo de la partida es:" + numeroObjetivo);
-
+        System.out.println("El número objetivo de la partida es: " + numeroObjetivo);
         System.out.println("Comienza el juego");
 
         int numJugadorActual = 1;
-
-        System.out.println("jugador" + numJugadorActual + " inserta un numero del 1 al 9");
+        System.out.println("Jugador " + numJugadorActual + ", inserta un número del 1 al 9");
 
         int numeroDel1Al9 = pedirNumeroDel1Al9();
         numeroTotal = sumarLosResultados(numeroTotal, numeroDel1Al9);
         int numAnterior = numeroDel1Al9;
 
-
-        int numeroJugador;
-        while (true){
-
-            if (numeroTotal >= numeroObjetivo){
+        while (true) {
+            if (numeroTotal >= numeroObjetivo) {
                 break;
-            }else {
-
-                System.out.println("Turno de jugador " + esElTurnoDe(numJugadorActual) + ":");
-
-
-                numeroJugador = pedirNuevoNumValid(numAnterior);
-                numAnterior = numeroJugador;
-
-                numeroTotal = sumarLosResultados(numeroTotal, numeroJugador);
-                numeroJugador = numAnterior;
-
-                System.out.println("jugador" + esElTurnoDe(numJugadorActual) + " has introducido el número: " + numeroJugador);
-                System.out.println("Total Actual:" + numeroTotal + " Objetivo:" + numeroObjetivo);
             }
 
+            // Cambiar de turno
+            numJugadorActual = cambiarTurno2Jugadores(numJugadorActual);
+            System.out.println("Turno de jugador " + numJugadorActual + ":");
 
+            int numeroJugador = pedirNuevoNumValid(numAnterior);
+            numAnterior = numeroJugador;
+
+            numeroTotal = sumarLosResultados(numeroTotal, numeroJugador);
+            System.out.println("Jugador " + numJugadorActual + " ha introducido el número: " + numeroJugador);
+            System.out.println("Total actual: " + numeroTotal + " | Objetivo: " + numeroObjetivo);
         }
 
-        System.out.println("El" + esElTurnoDe(numJugadorActual) + "ha ganado");
-
-
+        System.out.println("¡El jugador " + numJugadorActual + " ha ganado!");
     }
 
-
-    // funcion introducir numero tope para el juego
-
+    // Pedimos el numereo tope de la partida.
     public static int pedirNumeroObjetivo() {
-
-        //Le pedimos un numero entero al usuario o un numero ramdom (-1)
-
         Scanner sc = new Scanner(System.in);
         int numeroDeUsuario = sc.nextInt();
 
-        // aqui hacemos un bucle para que si le da error vuelva a preguntarle el numero
-        // Si introduce un numero valido se (break) rompe el bucle y continua el programa
-
         while (true) {
-
-            if (numeroDeUsuario >= 10 && numeroDeUsuario < 99) {
-
-                System.out.println("Comienza el juego");
+            if (numeroDeUsuario >= 10 && numeroDeUsuario <= 99) {
                 break;
             }
-
             if (numeroDeUsuario == -1) {
-
                 numeroDeUsuario = (int) (Math.random() * 90 + 10);
                 break;
-            } else {
-                System.err.println("numero invalido, porfavor introduce un numero valido (Debe ser entre 10 y 99, o -1)");
-                return pedirNumeroObjetivo();
             }
-
-
+            System.err.println("Número inválido. Introduce uno entre 10 y 99, o -1:");
+            return pedirNumeroObjetivo();
         }
         return numeroDeUsuario;
-
-
     }
 
-    //Preguntamos el número del 1 al 9 para empezar, solo devuelve numeros validos del 1 al 9
-
+    // Le pedimos al primer jugador un numero 1 al 9.
     public static int pedirNumeroDel1Al9() {
-
         Scanner sc = new Scanner(System.in);
-        int numero1Al9 = sc.nextInt();
+        int numero = sc.nextInt();
 
         while (true) {
-
-            if (numero1Al9 >= 1 && numero1Al9 <= 9) {
-                System.out.println("Jugador1 " + "has introducido el número: " + numero1Al9);
+            if (numero >= 1 && numero <= 9) {
+                System.out.println("Jugador 1 ha introducido el número: " + numero);
                 break;
             } else {
-                System.err.println("El número introducido no es válido");
-                numero1Al9 = sc.nextInt();
+                System.err.println("Número inválido. Introduce un número del 1 al 9:");
+                numero = sc.nextInt();
             }
         }
-        return numero1Al9;
-
+        return numero;
     }
 
+    // Aqui el programa comprobara que el numero introducido es valido.
     public static int pedirNuevoNumValid(int numeroAnterior) {
-
         Scanner sc = new Scanner(System.in);
         int nuevoNum = sc.nextInt();
 
         while (true) {
-
             if (validarFilasColumnas(nuevoNum, numeroAnterior)) {
                 break;
             } else {
-                System.err.println("El número introducido no es válido");
+                System.err.println("Número inválido. Introduce otro:");
                 nuevoNum = sc.nextInt();
             }
         }
         return nuevoNum;
-
     }
 
-//    Vamos a crear la condición de que el resto de números deben de estar en la msima fila y columna
-
+    // Vamos a crear la condición de que el resto de números deben de estar en la msima fila y columna.
     public static boolean validarFilasColumnas(int numeroJugador, int numeroAnterior) {
 
         //Si es el 1º turno, cualquier numero vale
@@ -202,26 +165,47 @@ public class Program {
 
     }
 
+    // Aqui sumaremos los numeros validos por cada turno para calcular el total en cada turno.
     public static int sumarLosResultados(int numeroTotal, int nuevoNum ) {
 
         return numeroTotal + nuevoNum;
     }
 
-    public static boolean esFinDeJuego(int numeroTotal, int numeroObjetivo) {
-        return numeroTotal >= numeroObjetivo;
-    }
-
-    public static int esElTurnoDe(int jugador) {
+    // En esta funcion cambiamos el turno de los jugadores en el modo 2 Jugadores.
+    public static int cambiarTurno2Jugadores(int jugador) {
 
         if (jugador == 1) {
             return 2;
         }
         if (jugador == 2) {
             return 1;
-        }else {
+        }
+        else {
             return -1;
         }
     }
+
+    // En esta funcion cambiamos el turno de los jugadores en el modo 3 Jugadores.
+    public static int cambiarTurno3Jugadores(int jugador) {
+
+        if (jugador == 1) {
+            return 2;
+        }
+        if (jugador == 2) {
+            return 3;
+        }
+        if (jugador == 3){
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    public static boolean EligirModoDeJuego(int cantidadDeJugadores){
+
+      return true;  // solo para poder subir a git
+    }
+
 
 
 }
