@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Program {
-    public static void main(String[] args) {
+    public static void main() {
 
         int numeroTotal = 0;
         System.out.println("Bienvenido a PASA LA CALCULADORA");
@@ -37,6 +37,15 @@ public class Program {
         }
 
         System.out.println("¡El jugador " + numJugadorActual + " ha ganado!");
+
+        System.out.println("¿Quieres jugar otra partida? (Si/No)");
+        boolean jugarOtra = reiniciarJuego();
+
+        if (jugarOtra) {
+            main();
+        } else {
+            System.out.println("Gracias por jugar. ¡Hasta la próxima!");
+        }
     }
 
     // Pedimos el numereo tope de la partida.
@@ -166,7 +175,7 @@ public class Program {
     }
 
     // Aqui sumaremos los numeros validos por cada turno para calcular el total en cada turno.
-    public static int sumarLosResultados(int numeroTotal, int nuevoNum ) {
+    public static int sumarLosResultados(int numeroTotal, int nuevoNum) {
 
         return numeroTotal + nuevoNum;
     }
@@ -179,8 +188,7 @@ public class Program {
         }
         if (jugador == 2) {
             return 1;
-        }
-        else {
+        } else {
             return -1;
         }
     }
@@ -194,18 +202,30 @@ public class Program {
         if (jugador == 2) {
             return 3;
         }
-        if (jugador == 3){
+        if (jugador == 3) {
             return 1;
         } else {
             return -1;
         }
     }
 
-    public static boolean EligirModoDeJuego(int cantidadDeJugadores){
+    public static boolean EligirModoDeJuego(int cantidadDeJugadores) {
 
-      return true;  // solo para poder subir a git
+        return true;  // solo para poder subir a git
     }
 
+    //En esta función creamos el bucle para reiniciar la partida
+    public static boolean reiniciarJuego() {
 
+        String respuesta = "Si";
+        Scanner sc = new Scanner(System.in);
+        String respuestaJugador = sc.next();
 
+        if (respuesta.compareToIgnoreCase(respuestaJugador) == 0) {
+            return true;
+        }
+        return false;
+
+    }
+    //Solo me falta hacer que si le das a "No" no se reinicie la partida
 }
