@@ -38,13 +38,18 @@ public class Program {
 
         System.out.println("¡El jugador " + numJugadorActual + " ha ganado!");
 
-        System.out.println("¿Quieres jugar otra partida? (Si/No)");
-        boolean jugarOtra = reiniciarJuego();
-
-        if (jugarOtra) {
-            main();
-        } else {
-            System.out.println("Gracias por jugar. ¡Hasta la próxima!");
+        while (true) {
+            System.out.println("¿Quieres jugar otra partida? (Si/No)");
+            boolean jugarOtra = reiniciarJuego();
+            if (jugarOtra) {
+                main();
+                break;
+            }
+            boolean noJugarOtra = finalizarJuego();
+            if (noJugarOtra) {
+                System.out.println("Gracias por jugar. ¡Hasta la próxima!");
+                break;
+            }
         }
     }
 
@@ -194,38 +199,35 @@ public class Program {
     }
 
     // En esta funcion cambiamos el turno de los jugadores en el modo 3 Jugadores.
-    public static int cambiarTurno3Jugadores(int jugador) {
 
-        if (jugador == 1) {
-            return 2;
-        }
-        if (jugador == 2) {
-            return 3;
-        }
-        if (jugador == 3) {
-            return 1;
-        } else {
-            return -1;
-        }
-    }
-
-    public static boolean EligirModoDeJuego(int cantidadDeJugadores) {
-
-        return true;  // solo para poder subir a git
-    }
-
-    //En esta función creamos el bucle para reiniciar la partida
+    //En esta función creamos el bucle para reiniciar la partida.
     public static boolean reiniciarJuego() {
 
-        String respuesta = "Si";
+        String respuesta1 = "si";
         Scanner sc = new Scanner(System.in);
         String respuestaJugador = sc.next();
 
-        if (respuesta.compareToIgnoreCase(respuestaJugador) == 0) {
+        if (respuesta1.equalsIgnoreCase(respuestaJugador)){
             return true;
         }
+        else {
+            System.err.println("Inserte Si o No, Cualquier otro valor es invalido.");
+        }
         return false;
-
     }
-    //Solo me falta hacer que si le das a "No" no se reinicie la partida
+
+    public static boolean finalizarJuego() {
+
+        String respuesta2 = "no";
+        Scanner sc = new Scanner(System.in);
+        String respuestaJugador = sc.next();
+
+        if (respuesta2.equalsIgnoreCase(respuestaJugador)){
+            return true;
+        }
+        else {
+            System.err.println("Inserte Si o No, Cualquier otro valor es invalido.");
+        }
+        return false;
+    }
 }
