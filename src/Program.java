@@ -1,56 +1,65 @@
 import java.util.Scanner;
 
 public class Program {
-    public static void main() {
+    static Scanner sc = new Scanner(System.in);
 
+    public static void main(String[] args) {
+        boolean volverAJugar = true;
+        while (volverAJugar) {
+            jugarPartida();
+
+            volverAJugar = preguntarRepetir();
+        }
+        System.out.println("Gracias por jugar. ¡Hasta la próxima!");
+    }
+
+    public static void jugarPartida() {
         int numeroTotal = 0;
+
         System.out.println("Bienvenido a PASA LA CALCULADORA");
-        System.out.println("Por favor, introduce un número del 10 al 99");
-        System.out.println("Si quieres un número aleatorio, introduce: -1");
-
+        System.out.println("Ingrese el numero de jugadores que jugaran (Minimo 2 / Maximo 3)");
+        int numJugadores = preguntarPorJugadores();
+        System.out.println("Introduce un número del 10 al 99 (o -1 para aleatorio):");
         int numeroObjetivo = pedirNumeroObjetivo();
-        System.out.println("El número objetivo de la partida es: " + numeroObjetivo);
-        System.out.println("Comienza el juego");
 
-        int numJugadorActual = 1;
-        System.out.println("Jugador " + numJugadorActual + ", inserta un número del 1 al 9");
+        System.out.println("El número objetivo es: " + numeroObjetivo);
+        int turnoJugador = 1;
+        System.out.println("Jugador 1, elige un número del 1 al 9:");
+        int numAnterior = pedirNumeroDel1Al9();
+        numeroTotal += numAnterior;
 
-        int numeroDel1Al9 = pedirNumeroDel1Al9();
-        numeroTotal = sumarLosResultados(numeroTotal, numeroDel1Al9);
-        int numAnterior = numeroDel1Al9;
+        while (numeroTotal < numeroObjetivo) {
+            turnoJugador = comprobarQuienJuega(turnoJugador , numJugadores);
+            System.out.println("Turno del jugador " + turnoJugador + ":");
+            int numero = pedirNuevoNumValid(numAnterior);
+            numAnterior = numero;
+            numeroTotal += numero;
 
-        while (true) {
-            if (numeroTotal >= numeroObjetivo) {
-                break;
-            }
-
-            // Cambiar de turno
-            numJugadorActual = cambiarTurno2Jugadores(numJugadorActual);
-            System.out.println("Turno de jugador " + numJugadorActual + ":");
-
-            int numeroJugador = pedirNuevoNumValid(numAnterior);
-            numAnterior = numeroJugador;
-
-            numeroTotal = sumarLosResultados(numeroTotal, numeroJugador);
-            System.out.println("Jugador " + numJugadorActual + " ha introducido el número: " + numeroJugador);
-            System.out.println("Total actual: " + numeroTotal + " | Objetivo: " + numeroObjetivo);
+            System.out.println("Jugador " + turnoJugador + " Eligio --> " + numero);
+            System.out.println("Total actual: " + numeroTotal + " / Objetivo: " + numeroObjetivo);
         }
 
-        System.out.println("¡El jugador " + numJugadorActual + " ha ganado!");
+        System.out.println("¡El jugador " + turnoJugador + " ha ganado!");
+    }
 
-        while (true) {
-            System.out.println("¿Quieres jugar otra partida? (Si/No)");
-            boolean jugarOtra = reiniciarJuego();
-            if (jugarOtra) {
-                main();
-                break;
-            }
-            boolean noJugarOtra = finalizarJuego();
-            if (noJugarOtra) {
-                System.out.println("Gracias por jugar. ¡Hasta la próxima!");
-                break;
-            }
+    // Preguntaremos por el numero de jugadores que jugaran en la partida.
+    public static int preguntarPorJugadores() {
+        int numeroJugadores;
+        Scanner sc = new Scanner(System.in);
+        numeroJugadores = sc.nextInt();
+
+        while (numeroJugadores < 2 || numeroJugadores > 3) {
+            System.out.println("Ingrese el numero de jugadores que jugaran (Minimo 2 / Maximo 3");
+            numeroJugadores = sc.nextInt();
         }
+        return numeroJugadores;
+    }
+
+    // Comprobamos si son 2 jugadores o 3 jugadores.
+    public static int comprobarQuienJuega(int turnoJugador, int numJugadores ) {
+        return (turnoJugador % numJugadores) + 1;
+
+
     }
 
     // Pedimos el numereo tope de la partida.
@@ -65,9 +74,10 @@ public class Program {
             if (numeroDeUsuario == -1) {
                 numeroDeUsuario = (int) (Math.random() * 90 + 10);
                 break;
+            } else {
+                System.err.println("Número inválido. Introduce uno entre 10 y 99, o -1:");
+                return pedirNumeroObjetivo();
             }
-            System.err.println("Número inválido. Introduce uno entre 10 y 99, o -1:");
-            return pedirNumeroObjetivo();
         }
         return numeroDeUsuario;
     }
@@ -179,55 +189,20 @@ public class Program {
 
     }
 
-    // Aqui sumaremos los numeros validos por cada turno para calcular el total en cada turno.
-    public static int sumarLosResultados(int numeroTotal, int nuevoNum) {
-
-        return numeroTotal + nuevoNum;
-    }
-
-    // En esta funcion cambiamos el turno de los jugadores en el modo 2 Jugadores.
-    public static int cambiarTurno2Jugadores(int jugador) {
-
-        if (jugador == 1) {
-            return 2;
-        }
-        if (jugador == 2) {
-            return 1;
-        } else {
-            return -1;
-        }
-    }
-
-    // En esta funcion cambiamos el turno de los jugadores en el modo 3 Jugadores.
-
-    //En esta función creamos el bucle para reiniciar la partida.
-    public static boolean reiniciarJuego() {
-
-        String respuesta1 = "si";
+    // En esta funcion vamos preguntaremos al usuario si quiere repetir la partida.
+    public static boolean preguntarRepetir() {
         Scanner sc = new Scanner(System.in);
-        String respuestaJugador = sc.next();
+        while (true) {
+            System.out.println("¿Quieres jugar otra partida? (si/no)");
+            String respuesta = sc.next().trim().toLowerCase();
 
-        if (respuesta1.equalsIgnoreCase(respuestaJugador)){
-            return true;
+            if (respuesta.equals("si")) return true;
+            if (respuesta.equals("no")) return false;
+
+            System.err.println("Respuesta inválida. Escribe 'si' o 'no'.");
         }
-        else {
-            System.err.println("Inserte Si o No, Cualquier otro valor es invalido.");
-        }
-        return false;
     }
 
-    public static boolean finalizarJuego() {
 
-        String respuesta2 = "no";
-        Scanner sc = new Scanner(System.in);
-        String respuestaJugador = sc.next();
 
-        if (respuesta2.equalsIgnoreCase(respuestaJugador)){
-            return true;
-        }
-        else {
-            System.err.println("Inserte Si o No, Cualquier otro valor es invalido.");
-        }
-        return false;
-    }
 }
